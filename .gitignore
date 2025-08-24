@@ -1,6 +1,11 @@
-/.calva/output-window
-/.clj-kondo
-/.lsp/.cache
+# Calva (VS Code Clojure extension)
+.calva/
+
+# clj-kondo linter config/cache
+.clj-kondo/
+
+# LSP server caches
+.lsp/
 /out/
 /resources/public/js/compiled/
 /target/
