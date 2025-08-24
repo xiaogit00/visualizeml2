@@ -1,1 +1,0 @@
-["^ ","~$generate-data",["^ ","~:row",1,"~:col",1,"~:fixed-arities",["~#set",[1]],"~:name","^0","~:ns","~$user","~:top-ns",null,"~:arities",["^ ","~i1",["^ ","~:ret","~:vector","~:arglist-str","[num-inputs]"]],"~:type","~:fn"],"~:filename","/Users/lei/p/visualizeml2/src/visualizeml2/math/generate.cljs"]
