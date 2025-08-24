@@ -25,8 +25,8 @@
   "Generates estimate line given dataset generated from generate-data)"
   []
   (let [data @(rf/subscribe [::subs/linear-data])
-        b1 @(rf/subscribe [::subs/linear-b1])
-        b0 @(rf/subscribe [::subs/linear-b0])
+        b1 (js/Number @(rf/subscribe [::subs/linear-b1]))
+        b0 (js/Number @(rf/subscribe [::subs/linear-b0]))
         g (fn [x] (+ (* b1 x) b0))]
     (map #(assoc % :y (g (:x %))) data))
   )
