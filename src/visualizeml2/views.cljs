@@ -1,20 +1,17 @@
 (ns visualizeml2.views
   (:require
    [re-frame.core :as rf]
-   [reagent.core :as r]
    [visualizeml2.subs :as subs]
    [visualizeml2.math.generate :as generate]
    [visualizeml2.charts :as charts]
-   ["katex" :as katex]
    ))
 
 (defn math-formula
   [latex & [{:keys [display?]}]]
-  (let [html (.renderToString katex latex
-                              #js {:throwOnError false
-                                   :displayMode (boolean display?)})]
-    [:span {:dangerouslySetInnerHTML {:__html html}}]))
-
+  (let [wrapped (if display?
+                  (str "\\[" latex "\\]")   ;; block math
+                  (str "\\(" latex "\\)"))] ;; inline math
+    [:span {:dangerouslySetInnerHTML {:__html wrapped}}]))
 
 (defn linear-regression []
   [:div
@@ -37,9 +34,9 @@
    [:input#b0 {:type "text"
                :value @(rf/subscribe [::subs/linear-b0])
                :on-change (fn [e] (rf/dispatch [:update-linear-b0 (-> e .-target .-value)]))}]
-   [:div
-    [math-formula "\\frac{a}{b} + c^2"]                ;; inline
-    ]
+   [math-formula "L = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2"]
+   
+   
    ])
 
 
