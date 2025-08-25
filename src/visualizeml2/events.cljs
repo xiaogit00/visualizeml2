@@ -46,3 +46,11 @@
  :update-linear-fn-text
  (fn [db [_ fn-text]]
    (assoc db :linear-fn-text fn-text)))
+
+(rf/reg-event-db
+ :render-loss
+ (fn [db _]
+   (assoc db
+          :show-linear-loss-eqn true
+          :linear-loss 5)
+   ))

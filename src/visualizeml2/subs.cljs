@@ -31,3 +31,9 @@
  ::linear-b1
  (fn [db]
    (:linear-b1 db)))
+
+(rf/reg-sub
+ ::show-linear-loss-eqn
+ (fn [db]
+   (:show-linear-loss-eqn db)))
+
