@@ -50,7 +50,7 @@
 (rf/reg-event-db
  :render-loss
  (fn [db _]
-   (assoc db
-          :show-linear-loss-eqn true
-          :linear-loss 5)
+   (-> db
+       (assoc :linear-loss 10)
+       (update :show-linear-loss-eqn not))
    ))

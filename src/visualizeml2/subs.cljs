@@ -37,3 +37,7 @@
  (fn [db]
    (:show-linear-loss-eqn db)))
 
+(rf/reg-sub
+ ::linear-loss
+ (fn [db]
+   (:linear-loss db)))

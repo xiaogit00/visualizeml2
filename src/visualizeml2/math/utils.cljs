@@ -42,6 +42,16 @@
   (let [[_ [arg] body] fn-form]
     (str "f(" arg ") = " (expr->str body env))))
 
+(defn math-formula
+  [latex & [{:keys [display? style class id] :as opts}]]
+  (let [wrapped (if display?
+                  (str "\\[" latex "\\]")   ;; block math (centered)
+                  (str "\\(" latex "\\)"))] ;; inline math
+    [:span (cond-> {:dangerouslySetInnerHTML {:__html wrapped}}
+             style (assoc :style style)
+             class (assoc :class class)
+             id    (assoc :id id))]))
+
 (def b1 2.33)
 (def b0 3.1332)
 

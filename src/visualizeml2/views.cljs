@@ -5,23 +5,15 @@
    [visualizeml2.subs :as subs]
    [visualizeml2.math.generate :as generate]
    [visualizeml2.charts :as charts]
+   [visualizeml2.math.utils :as utils]
    ))
 
-(defn math-formula
-  [latex & [{:keys [display? style class id] :as opts}]]
-  (let [wrapped (if display?
-                  (str "\\[" latex "\\]")   ;; block math (centered)
-                  (str "\\(" latex "\\)"))] ;; inline math
-    [:span (cond-> {:dangerouslySetInnerHTML {:__html wrapped}}
-             style (assoc :style style)
-             class (assoc :class class)
-             id    (assoc :id id))]))
 
-;; Conditional rendering approach - cleanest for show/hide
-(defn linear-loss-eqn-css []
+
+(defn linear-loss-eqn-css [eqn]
   (let [show? @(rf/subscribe [::subs/show-linear-loss-eqn])]
-    [math-formula
-     "L = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2"
+    [utils/math-formula
+     eqn
      {:display? false
       :style {:visibility (if show? "visible" "hidden")
               :margin "1rem 0"}}]))
@@ -51,10 +43,8 @@
    [:button {:on-click 
              #(rf/dispatch [:render-loss])}
     "Calculate Loss"]
-   [linear-loss-eqn-css]
-   
-   ;;  [math-formula "L = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2"]
-   
+   [linear-loss-eqn-css "L = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2 ="]
+   (when @(rf/subscribe [::subs/show-linear-loss-eqn]) [:span @(rf/subscribe [::subs/linear-loss])])
    
    ])
 
