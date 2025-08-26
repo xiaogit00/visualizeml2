@@ -1,11 +1,9 @@
 (ns visualizeml2.subs
   (:require
-   [re-frame.core :as rf]))
+   [re-frame.core :as rf]
+   [visualizeml2.math.utils :as utils]
+   [goog.string :as gstring]))
 
-(rf/reg-sub
- ::name
- (fn [db]
-   (:name db)))
 
 (rf/reg-sub
  ::linear-data
@@ -17,10 +15,6 @@
  (fn [db]
    (:show-estimate-line db)))
 
-(rf/reg-sub
- ::linear-fn-text
- (fn [db]
-   (:linear-fn-text db)))
 
 (rf/reg-sub
  ::linear-b0
@@ -33,11 +27,20 @@
    (:linear-b1 db)))
 
 (rf/reg-sub
+ ::linear-deps
+ (fn [db]
+   (when-let [b0 (:linear-b0 db)]
+     (let [b1 (:linear-b1 db)
+           y (map :y (:linear-data db))
+           y_pred (map #(+ (* % b1) b0) y)
+           loss (reduce + (map #(Math/pow (- %2 %1) 2) y y_pred))
+           fn-text (utils/fn->pretty-str '(fn [x] (+ (* b1 x) b0)) {'b1 b1 'b0 (goog.string/format "%.4f" b0)})]
+       {:loss loss
+        :fn-text fn-text})
+     )
+   ))
+
+(rf/reg-sub
  ::show-linear-loss-eqn
  (fn [db]
    (:show-linear-loss-eqn db)))
-
-(rf/reg-sub
- ::linear-loss
- (fn [db]
-   (:linear-loss db)))
