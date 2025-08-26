@@ -22,7 +22,7 @@
   [:div
    [:h1 "Linear Regression"]
    [:button {:on-click 
-             #(rf/dispatch [:generate-data-and-params (generate/generate-data 10)])
+             #(rf/dispatch [:update-linear-info! (generate/generate-data 10)])
              }"Generate-data"]
    [charts/scatter-plot 
     @(rf/subscribe [::subs/linear-data])
@@ -41,10 +41,10 @@
                 :value @(rf/subscribe [::subs/linear-b0])
                 :on-change (fn [e] (rf/dispatch [:update-linear-b0 (-> e .-target .-value)]))}]]
    [:button {:on-click 
-             #(rf/dispatch [:render-loss])}
+             #(rf/dispatch [:toggle-linear-eqn])}
     "Calculate Loss"]
    [linear-loss-eqn-css "L = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2 ="]
-   (when @(rf/subscribe [::subs/show-linear-loss-eqn]) [:span @(rf/subscribe [::subs/linear-loss])])
+   (when @(rf/subscribe [::subs/show-linear-loss-eqn]) [:span (.toFixed @(rf/subscribe [::subs/linear-loss]) 2)])
    
    ])
 
