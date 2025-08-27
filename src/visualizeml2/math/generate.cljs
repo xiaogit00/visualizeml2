@@ -28,6 +28,7 @@
         b1 (js/Number @(rf/subscribe [::subs/linear-b1]))
         b0 (js/Number @(rf/subscribe [::subs/linear-b0]))
         g (fn [x] (+ (* b1 x) b0))]
+    (println (map #(assoc % :y (g (:x %))) data))
     (map #(assoc % :y (g (:x %))) data))
   )
 ;; (def mydata [{:x 1, :y 1} {:x 2, :y 6} {:x 3, :y 5} {:x 4, :y 9} {:x 5, :y 12} {:x 6, :y 7} {:x 7, :y 2} {:x 8, :y 2} {:x 9, :y 19}])
