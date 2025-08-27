@@ -17,21 +17,32 @@
       :style {:visibility (if show? "visible" "hidden")
               :margin "1rem 0"}}]))
 
+(defn optimize-loss-workings []
+  (let [b0 (:b0 (:optimal-params @(rf/subscribe [::subs/linear-deps])))
+        b1 (:b1 (:optimal-params @(rf/subscribe [::subs/linear-deps])))]
+    (when @(rf/subscribe [::subs/show-workings])
+      [:div
+       [:p "To find the 'best fit' line, i.e. the ideal params of b0 and b1 such that loss is minimized, we need to find dL/db0 and dL/db1 and set these derivatives to 0."]
+       [:p "Insert workings"]
+       [:p "Optimal b0 found:" (.toFixed b0 2)]
+       [:p "Optimal b1 found:" (.toFixed b1 2)]
+       [:button {:on-click #(rf/dispatch [:optimize-params b0 b1])}
+        "Set params!"]])))
+
 (defn linear-regression []
   [:div
    [:h1 "Linear Regression"]
-   [:button {:on-click 
-             #(rf/dispatch [:update-linear-data-and-params! (generate/generate-data 10)])
-             }"Generate-data"]
-   [charts/scatter-plot 
+   [:button {:on-click
+             #(rf/dispatch [:update-linear-data-and-params! (generate/generate-data 10)])} "Generate-data"]
+   [charts/scatter-plot
     @(rf/subscribe [::subs/linear-data])
     @(rf/subscribe [::subs/show-estimate-line])
     @(rf/subscribe [::subs/show-linear-loss-eqn])]
-   [:button {:on-click 
+   [:button {:on-click
              #(rf/dispatch [:toggle-estimate-line])}
     "Estimate Line of Best Fit"]
    [:p (:fn-text @(rf/subscribe [::subs/linear-deps]))]
-   [:div 
+   [:div
     [:label {:for "b1"} "b1: "]
     [:input#b1 {:type "text"
                 :value @(rf/subscribe [::subs/linear-b1])
@@ -40,13 +51,19 @@
     [:input#b0 {:type "text"
                 :value @(rf/subscribe [::subs/linear-b0])
                 :on-change (fn [e] (rf/dispatch [:update-linear-b0! (-> e .-target .-value)]))}]]
-   [:button {:on-click 
+   [:button {:on-click
              #(rf/dispatch [:toggle-linear-eqn])}
     "Calculate Loss"]
    [linear-loss-eqn-css "L = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2 ="]
-   (when @(rf/subscribe [::subs/show-linear-loss-eqn]) [:span (.toFixed (:loss @(rf/subscribe [::subs/linear-deps])) 2)])
+   (when @(rf/subscribe [::subs/show-linear-loss-eqn])
+     [:span (.toFixed (:loss @(rf/subscribe [::subs/linear-deps])) 2)]
+     )
+   (when @(rf/subscribe [::subs/show-linear-loss-eqn])
+     [:div [:button {:on-click #(rf/dispatch [:show-workings])}
+            "Optimize Loss!"]]
+     )
    
-   ])
+   [optimize-loss-workings]])
 
 
 (defn main-panel [] 

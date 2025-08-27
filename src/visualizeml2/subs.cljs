@@ -34,9 +34,11 @@
            y (map :y (:linear-data db))
            y_pred (map #(+ (* % b1) b0) y)
            loss (reduce + (map #(Math/pow (- %2 %1) 2) y y_pred))
-           fn-text (utils/fn->pretty-str '(fn [x] (+ (* b1 x) b0)) {'b1 b1 'b0 (goog.string/format "%.4f" b0)})]
+           fn-text (utils/fn->pretty-str '(fn [x] (+ (* b1 x) b0)) {'b1 b1 'b0 (goog.string/format "%.4f" b0)})
+           optimal-params {:b0 1 :b1 2}] ;; this is a placeholder, function will be filled in soon.
        {:loss loss
-        :fn-text fn-text})
+        :fn-text fn-text
+        :optimal-params optimal-params})
      )
    ))
 
@@ -44,3 +46,8 @@
  ::show-linear-loss-eqn
  (fn [db]
    (:show-linear-loss-eqn db)))
+
+(rf/reg-sub
+ ::show-workings
+ (fn [db]
+   (:show-workings db)))

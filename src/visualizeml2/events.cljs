@@ -45,3 +45,16 @@
  :toggle-linear-eqn
  (fn [db _]
    (update db :show-linear-loss-eqn not)))
+
+(rf/reg-event-db
+ :show-workings
+ (fn [db _]
+   (update db :show-workings not)))
+
+
+(rf/reg-event-db
+ :optimize-params
+ (fn [db [_ b0 b1]]
+   (assoc db 
+          :linear-b0 b0
+          :linear-b1 b1)))
