@@ -28,8 +28,27 @@
         b1 (js/Number @(rf/subscribe [::subs/linear-b1]))
         b0 (js/Number @(rf/subscribe [::subs/linear-b0]))
         g (fn [x] (+ (* b1 x) b0))]
-    (println (map #(assoc % :y (g (:x %))) data))
     (map #(assoc % :y (g (:x %))) data))
   )
+
+(defn generate-residual-data
+  "Generates residual data as array of array pairs"
+  []
+  (let [scatter-data @(rf/subscribe [::subs/linear-data])
+        b1 (js/Number @(rf/subscribe [::subs/linear-b1]))
+        b0 (js/Number @(rf/subscribe [::subs/linear-b0]))
+        g (fn [x] (+ (* b1 x) b0))
+        estimate-data (map #(assoc % :y (g (:x %))) scatter-data)]
+    (map (fn [pair1, pair2] (conj [] pair1 pair2)) scatter-data estimate-data)))
+
 ;; (def mydata [{:x 1, :y 1} {:x 2, :y 6} {:x 3, :y 5} {:x 4, :y 9} {:x 5, :y 12} {:x 6, :y 7} {:x 7, :y 2} {:x 8, :y 2} {:x 9, :y 19}])
 ;; (generate-estimate-line-data mydata )
+
+
+;; (def b1 3)
+;; (def b0 2)
+;; (def data1 [{:x 1 :y 2} {:x 2 :y 5}])
+;; (defn g [x] (+ (* b1 x) b0))
+;; (map #(assoc % :y (g (:x %))) data1)
+
+;; (conj [] {:x 1 :y 2} {:x 1 :y 2})

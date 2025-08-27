@@ -25,7 +25,8 @@
              }"Generate-data"]
    [charts/scatter-plot 
     @(rf/subscribe [::subs/linear-data])
-    @(rf/subscribe [::subs/show-estimate-line])]
+    @(rf/subscribe [::subs/show-estimate-line])
+    @(rf/subscribe [::subs/show-linear-loss-eqn])]
    [:button {:on-click 
              #(rf/dispatch [:toggle-estimate-line])}
     "Estimate Line of Best Fit"]
