@@ -44,11 +44,11 @@
  ::linear-deps
  (fn [db]
    (when-let [b0 (js/Number (:linear-b0 db))]
-     (let [b1 (:linear-b1 db)
+     (let [b1 (js/Number (:linear-b1 db))
            linear-data (:linear-data db)
            ys (map :y linear-data)
            xs (map :x linear-data)
-           y_pred (map #(+ (* % b1) b0) ys)
+           y_pred (map #(+ (* % b1) b0) xs)
            loss (reduce + (map #(Math/pow (- %2 %1) 2) ys y_pred))
            fn-text (utils/fn->pretty-str '(fn [x] (+ (* b1 x) b0)) {'b1 b1 'b0 (goog.string/format "%.4f" b0)})
            y_bar (/ (reduce + ys) (count ys))
@@ -72,16 +72,34 @@
  (fn [db]
    (:show-workings db)))
 
-(def sampleY [{:x 5, :y 12} {:x 3, :y 13}])
-(def ys (map :y sampleY))
-(def xs (map :x sampleY))
-(def y_bar (/ (reduce + ys) (count ys)))
-(def x_bar (/ (reduce + xs) (count xs)))
-x_bar
-y_bar
+(def sample-dataset [{:x 1, :y 1}
+        {:x 2, :y 2}
+        {:x 3, :y 4}
+        {:x 4, :y 0}
+        {:x 5, :y 1}
+        {:x 6, :y 13}
+        {:x 7, :y 1}
+        {:x 8, :y 0}
+        {:x 9, :y 20}])
+(def ys (map :y sample-dataset))
+(def b0 -1.63)
+(def b1 1.2833333333333334)
+(def y_pred (map #(+ (* % b1) b0) ys))
+(def loss (reduce + (map #(Math/pow (- %2 %1) 2) ys y_pred)))
+loss
+
+
+
+;; (def sampleY [{:x 5, :y 12} {:x 3, :y 13}])
+;; (def ys (map :y sampleY))
+;; (def xs (map :x sampleY))
+;; (def y_bar (/ (reduce + ys) (count ys)))
+;; (def x_bar (/ (reduce + xs) (count xs)))
+;; x_bar
+;; y_bar
 
 
 
 
 
-(/ (reduce + (map #(:y %) sampleY)) (count sampleY))
+;; (/ (reduce + (map #(:y %) sampleY)) (count sampleY))
