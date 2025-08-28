@@ -22,10 +22,10 @@
         b1 (:b1 (:optimal-params @(rf/subscribe [::subs/linear-deps])))]
     (when @(rf/subscribe [::subs/show-workings])
       [:div
-       [:p "To find the 'best fit' line, i.e. the ideal params of b0 and b1 such that loss is minimized, we need to find dL/db0 and dL/db1 and set these derivatives to 0."]
+       [:p "To optimize loss is to find the params such that loss is minimized. This is also known as the line of 'best fit'. In order to do that, we need to find dL/db0 and dL/db1 and set these derivatives to 0."]
        [:p "Insert workings"]
-       [:p "Optimal b0 found:" (.toFixed b0 2)]
-       [:p "Optimal b1 found:" (.toFixed b1 2)]
+       [:p "Optimal b0 found:" b0]
+       [:p "Optimal b1 found:" b1]
        [:button {:on-click #(rf/dispatch [:optimize-params b0 b1])}
         "Set params!"]])))
 
