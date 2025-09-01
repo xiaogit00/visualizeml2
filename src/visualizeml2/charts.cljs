@@ -17,8 +17,8 @@
     :data data
     :margin {:top 20 :right 20 :bottom 20 :left 20}}
    [:> CartesianGrid {:strokeDasharray "3 3"}]
-   [:> XAxis {:type "number" :dataKey "x" :name "X Value"}]
-   [:> YAxis {:type "number" :dataKey "y" :name "Y Value"}]
+   [:> XAxis {:type "number" :dataKey "x" :name "X Value" :stroke "#FFDE82" :axisLine true}]
+   [:> YAxis {:type "number" :dataKey "y" :name "Y Value" :stroke "#FFDE82" :axisLine true}]
    [:> Tooltip {:cursor {:strokeDasharray "3 3"}}]
    [:> Legend]
    (when show-estimate-line 

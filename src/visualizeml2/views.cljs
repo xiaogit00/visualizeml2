@@ -28,46 +28,103 @@
        [:p "Optimal b1 found:" b1]
        [:button {:on-click #(rf/dispatch [:optimize-params b0 b1])}
         "Set params!"]])))
+;; Accept color as a prop for text and brackets
+(defn column-vector-svg [values & {:keys [color] :or {color "#A7DCFF"}}]
+  (let [font-size 24
+        spacing 32
+        n (count values)
+        width 120
+        height (* spacing n)
+        x-left 10
+        x-right 90
+        y-top font-size
+        y-bottom (+ y-top (* spacing (dec n)))]
+    [:svg {:width width :height (+ height 40)}
+     ;; Left bracket
+     [:line {:x1 x-left :y1 y-top :x2 x-left :y2 y-bottom :stroke color :stroke-width 3}]
+     [:line {:x1 x-left :y1 y-top :x2 (+ x-left 15) :y2 y-top :stroke color :stroke-width 3}]
+     [:line {:x1 x-left :y1 y-bottom :x2 (+ x-left 15) :y2 y-bottom :stroke color :stroke-width 3}]
+     ;; Right bracket
+     [:line {:x1 x-right :y1 y-top :x2 x-right :y2 y-bottom :stroke color :stroke-width 3}]
+     [:line {:x1 x-right :y1 y-top :x2 (- x-right 15) :y2 y-top :stroke color :stroke-width 3}]
+     [:line {:x1 x-right :y1 y-bottom :x2 (- x-right 15) :y2 y-bottom :stroke color :stroke-width 3}]
+     ;; Numbers
+     (for [[i v] (map-indexed vector values)]
+       [:text {:x 40
+               :y (+ y-top 10 (* i spacing))
+               :font-size font-size
+               :fill color
+               :font-family "Menlo, monospace"}
+        v])]))
+
+;; Accept color as a prop for label and vector
+;; Style label as bold and italics
+(defn column-vector-with-label [values label & {:keys [color] :or {color "#A7DCFF"}}]
+  [:div {:style {:display "flex"
+                 :align-items "center"
+                 :margin "0 8px"}}
+   [:span {:style {:font-family "Menlo, monospace"
+                   :font-size "24px"
+                   :color color
+                   :margin-right "12px"
+                   :font-weight "bold"
+                   :font-style "italic"}}
+    label]
+   [column-vector-svg values :color color]])
+;; Refactor: allow rendering two column vectors with labels side by side
+;; Style as white and flush right
+(defn column-vectors-side-by-side [x-values y-values]
+  [:div {:style {:display "flex"
+                 :gap "0px"
+                 :justify-content "flex-end"}}
+   [column-vector-with-label x-values "x =" :color "white"]
+   [column-vector-with-label y-values "y =" :color "white"]])
+
 
 (defn linear-regression []
   [:div
-   [:h1 "Linear Regression"]
-   [:button {:on-click
-             #(rf/dispatch [:update-linear-data-and-params! (generate/generate-data 10)])} "Generate-data"]
-   [charts/scatter-plot
-    @(rf/subscribe [::subs/linear-data])
-    @(rf/subscribe [::subs/show-estimate-line])
-    @(rf/subscribe [::subs/show-linear-loss-eqn])]
-   [:button {:on-click
+   [:h1.is-family-monospace.has-text-centered.is-size-3.has-text-info-75	 "Linear Regression"]
+   [:div.section
+    [:div.columns ;; container for columns
+     [:div.column.is-three-fifths ;; left column
+      [charts/scatter-plot
+       @(rf/subscribe [::subs/linear-data])
+       @(rf/subscribe [::subs/show-estimate-line])
+       @(rf/subscribe [::subs/show-linear-loss-eqn])]]
+  [:div.column ;; right column
+   [:button.button.is-outlined.is-info {:on-click
+       #(rf/dispatch [:update-linear-data-and-params! (generate/generate-data 10)])} "Generate-data"]
+   [column-vectors-side-by-side [1 2 3 4 5 6 7 8 9 10] [1 2 3 4 5 6 7 8 9 10]]
+   [:button.button.is-outlined.is-info {:on-click
              #(rf/dispatch [:toggle-estimate-line])}
-    "Estimate Line of Best Fit"]
-   [:p (:fn-text @(rf/subscribe [::subs/linear-deps]))]
-   [:div
-    [:label {:for "b1"} "b1: "]
-    [:input#b1 {:type "text"
-                :value @(rf/subscribe [::subs/linear-b1])
-                :on-change (fn [e] (rf/dispatch [:update-linear-b1! (-> e .-target .-value)]))}]
-    [:label {:for "b0"} "b0: "]
-    [:input#b0 {:type "text"
-                :value @(rf/subscribe [::subs/linear-b0])
-                :on-change (fn [e] (rf/dispatch [:update-linear-b0! (-> e .-target .-value)]))}]]
-   [:button {:on-click
-             #(rf/dispatch [:toggle-linear-eqn])}
-    "Calculate Loss"]
-   [linear-loss-eqn-css "L = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2 ="]
-   (when @(rf/subscribe [::subs/show-linear-loss-eqn])
-     [:span (.toFixed (:loss @(rf/subscribe [::subs/linear-deps])) 2)]
-     )
-   (when @(rf/subscribe [::subs/show-linear-loss-eqn])
-     [:div [:button {:on-click #(rf/dispatch [:show-workings])}
-            "Optimize Loss!"]]
-     )
-   
-   [optimize-loss-workings]])
-
-
-(defn main-panel [] 
-  [:div
-   [:div
-    [linear-regression]
+    "Draw rough line of best fit"]]]
     ]])
+
+
+
+
+;; [:p (:fn-text @(rf/subscribe [::subs/linear-deps]))]
+;; [:div
+;;  [:label {:for "b1"} "b1: "]
+;;  [:input#b1 {:type "text"
+;;              :value @(rf/subscribe [::subs/linear-b1])
+;;              :on-change (fn [e] (rf/dispatch [:update-linear-b1! (-> e .-target .-value)]))}]
+;;  [:label {:for "b0"} "b0: "]
+;;  [:input#b0 {:type "text"
+;;              :value @(rf/subscribe [::subs/linear-b0])
+;;              :on-change (fn [e] (rf/dispatch [:update-linear-b0! (-> e .-target .-value)]))}]]
+;; [:button {:on-click
+;;           #(rf/dispatch [:toggle-linear-eqn])}
+;;  "Calculate Loss"]
+;; [linear-loss-eqn-css "L = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2 ="]
+;; (when @(rf/subscribe [::subs/show-linear-loss-eqn])
+;;   [:span (.toFixed (:loss @(rf/subscribe [::subs/linear-deps])) 2)])
+;; (when @(rf/subscribe [::subs/show-linear-loss-eqn])
+;;   [:div [:button {:on-click #(rf/dispatch [:show-workings])}
+;;          "Optimize Loss!"]])
+
+;; [optimize-loss-workings]
+(defn main-panel [] 
+  [:div.has-background-black 
+   [:div.container.pt-5	
+         [linear-regression]]])

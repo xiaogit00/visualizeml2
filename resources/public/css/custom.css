@@ -1,0 +1,8 @@
+/* Debug class for layout troubleshooting */
+.debug {
+  border: 1px solid red;
+}
+.button {
+  border-color: #A7DCFF !important;
+  color: #A7DCFF !important;
+}
