@@ -1,6 +1,20 @@
+/* Custom Bulma-compatible classes for transparent input and grey text */
+.is-transparent {
+  background: transparent !important;
+}
+
+.has-text-grey {
+  color: grey !important;
+}
+
+.input::placeholder {
+  color: grey;
+  opacity: 1;
+}
 /* Debug class for layout troubleshooting */
 .debug {
   border: 1px solid red;
+  /* border: none; */
 }
 .button {
   border-color: #A7DCFF !important;

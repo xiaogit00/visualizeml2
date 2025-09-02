@@ -6,16 +6,16 @@
 (defn residual-line [error-data] [:> Line {:type "linear"
                                  :dataKey "y"
                                  :data error-data
-                                 :stroke "pink"
+                                 :stroke "#FF6182"
                                  :dot false
                                  }])
 
 (defn scatter-plot [data show-estimate-line show-linear-loss-eqn]
   [:> ScatterChart
-   {:width 600
-    :height 400
+   {:width 720
+    :height 480
     :data data
-    :margin {:top 20 :right 20 :bottom 20 :left 20}}
+    :margin {:top 4 :right 4 :bottom 4 :left 0}}
    [:> CartesianGrid {:strokeDasharray "3 3"}]
    [:> XAxis {:type "number" :dataKey "x" :name "X Value" :stroke "#FFDE82" :axisLine true}]
    [:> YAxis {:type "number" :dataKey "y" :name "Y Value" :stroke "#FFDE82" :axisLine true}]

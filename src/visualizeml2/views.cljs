@@ -15,7 +15,9 @@
      eqn
      {:display? false
       :style {:visibility (if show? "visible" "hidden")
-              :margin "1rem 0"}}]))
+              :margin ""
+              :color "white"
+              :font-size "2.5em"}}]))
 
 (defn optimize-loss-workings []
   (let [b0 (:b0 (:optimal-params @(rf/subscribe [::subs/linear-deps])))
@@ -84,44 +86,66 @@
 (defn linear-regression []
   [:div
    [:h1.is-family-monospace.has-text-centered.is-size-3.has-text-info-75	 "Linear Regression"]
-   [:div.section
+   [:div.section.pb-0 ;; First section (Line chart + data + buttons)
     [:div.columns ;; container for columns
-     [:div.column.is-three-fifths ;; left column
+     [:div.column.is-three-fifths.debug  ;; left column
       [charts/scatter-plot
        @(rf/subscribe [::subs/linear-data])
        @(rf/subscribe [::subs/show-estimate-line])
        @(rf/subscribe [::subs/show-linear-loss-eqn])]]
-  [:div.column ;; right column
-   [:button.button.is-outlined.is-info {:on-click
-       #(rf/dispatch [:update-linear-data-and-params! (generate/generate-data 10)])} "Generate-data"]
-   [column-vectors-side-by-side [1 2 3 4 5 6 7 8 9 10] [1 2 3 4 5 6 7 8 9 10]]
-   [:button.button.is-outlined.is-info {:on-click
-             #(rf/dispatch [:toggle-estimate-line])}
-    "Draw rough line of best fit"]]]
-    ]])
+     [:div.column ;; right column
+      [:button.button.is-outlined.is-info {:on-click
+                                           #(rf/dispatch [:update-linear-data-and-params! (generate/generate-data 10)])} "Generate-data"]
+      [column-vectors-side-by-side [1 2 3 4 5 6 7 8 9 10] [1 2 3 4 5 6 7 8 9 10]]
+      [:button.button.is-outlined.is-info {:on-click
+                                           #(rf/dispatch [:toggle-estimate-line])}
+       "Draw rough line of best fit"]]]
+    ]
+   [:div.section.pt-0.debug ;; Second Section (Params + Loss)
+    [:div.columns
+     [:div.column.is-3.debug.pl-6 ;; Left Column of text, param input, and buttons 
+      [:div.columns ;; Param Inputs
+       [:div.column.is-half
+        [:label.label.has-text-danger {:for "b1"} "b1: "]
+        [:input#b1.input.is-transparent.has-text-warning {:type "text"
+                          :value @(rf/subscribe [::subs/linear-b1])
+                          :placeholder "b0"
+                          :on-change (fn [e] (rf/dispatch [:update-linear-b1! (-> e .-target .-value)]))}]
+        ]
+       [:div.column.is-half
+        [:label.label.has-text-danger-light {:for "b0"} "b0: "]
+        [:input#b0.input.is-transparent.has-text-warning {:type "text"
+                          :value @(rf/subscribe [::subs/linear-b0])
+                          :placeholder "b0"
+                          :on-change (fn [e] (rf/dispatch [:update-linear-b0! (-> e .-target .-value)]))}]]
+       
+       ]
+      [:button.button.is-outlined.is-info {:on-click
+                                           #(rf/dispatch [:toggle-linear-eqn])}
+       "Calculate Loss"]
+      ]
+     [:div.column.is-4.debug.pt-5
+      [linear-loss-eqn-css "L = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2"]
+      (when @(rf/subscribe [::subs/show-linear-loss-eqn])
+        [:div.is-size-2.has-text-white.is-family-monospace.pl-6.pt-2 (str "= " (.toFixed (:loss @(rf/subscribe [::subs/linear-deps])) 2))])
+      ]
+     [:div.column.is-one-third.debug
+      (when @(rf/subscribe [::subs/show-linear-loss-eqn])
+        [:div [:button.button.is-outlined.is-info.is-medium.is-fullwidth {:on-click #(rf/dispatch [:show-workings])}
+               "Optimize Loss!"]])]
+     ]
+    ]
+   ])
+
+
 
 
 
 
 ;; [:p (:fn-text @(rf/subscribe [::subs/linear-deps]))]
-;; [:div
-;;  [:label {:for "b1"} "b1: "]
-;;  [:input#b1 {:type "text"
-;;              :value @(rf/subscribe [::subs/linear-b1])
-;;              :on-change (fn [e] (rf/dispatch [:update-linear-b1! (-> e .-target .-value)]))}]
-;;  [:label {:for "b0"} "b0: "]
-;;  [:input#b0 {:type "text"
-;;              :value @(rf/subscribe [::subs/linear-b0])
-;;              :on-change (fn [e] (rf/dispatch [:update-linear-b0! (-> e .-target .-value)]))}]]
-;; [:button {:on-click
-;;           #(rf/dispatch [:toggle-linear-eqn])}
-;;  "Calculate Loss"]
-;; [linear-loss-eqn-css "L = \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2 ="]
-;; (when @(rf/subscribe [::subs/show-linear-loss-eqn])
-;;   [:span (.toFixed (:loss @(rf/subscribe [::subs/linear-deps])) 2)])
-;; (when @(rf/subscribe [::subs/show-linear-loss-eqn])
-;;   [:div [:button {:on-click #(rf/dispatch [:show-workings])}
-;;          "Optimize Loss!"]])
+
+
+
 
 ;; [optimize-loss-workings]
 (defn main-panel [] 
