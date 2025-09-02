@@ -25,8 +25,12 @@
    ;; RIGHT COLUMN
    [:div.column
     [buttons/generate-data-button]
-    [svg/column-vectors-side-by-side [1 2 3 4 5 6 7 8 9 10] [1 2 3 4 5 6 7 8 9 10]]
-    [buttons/estimate-best-fit-button]]])
+    (when @(rf/subscribe [::subs/linear-b0])
+      [:<>
+       [svg/column-vectors-side-by-side [1 2 3 4 5 6 7 8 9] (vec (map :y @(rf/subscribe [::subs/linear-data])))]
+       [buttons/estimate-best-fit-button]])]])
+
+
 
 (defn linear-regression-page []
   [:div

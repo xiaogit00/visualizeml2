@@ -27,9 +27,9 @@
      )))
 
 (rf/reg-event-db
- :toggle-estimate-line
+ :show-estimate-line
  (fn [db _]
-   (update db :show-estimate-line not)))
+   (assoc db :show-estimate-line true)))
 
 (rf/reg-event-db
  :update-linear-b1!
@@ -44,7 +44,7 @@
 (rf/reg-event-db
  :toggle-linear-eqn
  (fn [db _]
-   (update db :show-linear-loss-eqn not)))
+   (assoc db :show-linear-loss-eqn true)))
 
 (rf/reg-event-db
  :show-workings
