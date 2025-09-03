@@ -26,6 +26,11 @@
  (fn [db]
    (:linear-b1 db)))
 
+(rf/reg-sub
+ ::set-optimized-loss
+ (fn [db]
+   (:set-optimized-loss db)))
+
 (defn calculate-optimal-b1 
   "This implements the b1 eqn: sum((x-x_bar)(y-y_bar))/sum(x-x_bar)^2"
   [xs ys x_bar y_bar]
@@ -43,6 +48,7 @@
 (rf/reg-sub
  ::linear-deps
  (fn [db]
+   (println "This is run in linear-data")
    (when-let [b0 (js/Number (:linear-b0 db))]
      (let [b1 (js/Number (:linear-b1 db))
            linear-data (:linear-data db)

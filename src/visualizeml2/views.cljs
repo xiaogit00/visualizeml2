@@ -9,6 +9,7 @@
    [visualizeml2.components.svg :as svg]
    [visualizeml2.components.buttons :as buttons]
    [visualizeml2.components.inputs :as inputs]
+   [visualizeml2.components.linear-reg :as linear-reg]
    ))
 
 
@@ -31,35 +32,32 @@
        [buttons/estimate-best-fit-button]])]])
 
 
-
 (defn linear-regression-page []
   [:div
    [:h1.is-family-monospace.has-text-centered.is-size-3.has-text-info-75	 "Linear Regression"]
    [:div.section.pb-0 ;; First section (Line chart + data + buttons)
     [first-section]
-   [:div.section.pt-0.debug ;; Second Section (Params + Loss)
-    [:div.columns
-     [:div.column.is-3.debug.pl-6 ;; Left Column of text, param input, and buttons 
-      [:div.columns ;; Param Inputs
-       [inputs/b1-input]
-       [inputs/b0-input]
+    [:div.section.pt-0.debug ;; Second Section (Params + Loss)
+     [:div.columns
+      [:div.column.is-3.debug.pl-6 ;; Left Column of text, param input, and buttons 
+       [:div.columns ;; Param Inputs
+        [inputs/b1-input]
+        [inputs/b0-input]
+        ]
+       [buttons/calculate-loss-button]
        ]
-      [buttons/calculate-loss-button]
+      [equations/loss-equation]
+      ;;  [:p (:fn-text @(rf/subscribe [::subs/linear-deps]))]
+      [:div.column.is-one-third.debug
+       [buttons/optimize-loss-button]
+       [linear-reg/b0b1-display]
+       ]
       ]
-     [equations/loss-equation]
-     [:div.column.is-one-third.debug
-      [buttons/optimize-loss-button]
-      ]
-     ]
-    ]]])
+     [linear-reg/explanation-text]
+     [linear-reg/workings]
 
+     ]]])
 
-;; [:p (:fn-text @(rf/subscribe [::subs/linear-deps]))]
-
-
-
-
-;; [optimize-loss-workings]
 (defn main-panel [] 
   [:div.has-background-black 
    [:div.container.pt-5	

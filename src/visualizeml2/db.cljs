@@ -5,7 +5,7 @@
    :linear-b0 nil
    :linear-b1 nil
    :show-estimate-line false
-   :show-loss-eqn false})
+   :set-optimized-loss false})
 
 ;;  :show-estimate-line false
 ;;   :show-linear-loss-eqn false

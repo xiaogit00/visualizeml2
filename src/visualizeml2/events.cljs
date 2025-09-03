@@ -51,6 +51,12 @@
  (fn [db _]
    (update db :show-workings not)))
 
+(rf/reg-event-fx
+ :optimize-loss
+ (fn [{:keys [db]} [_ b0 b1]]
+   {:db (assoc db :set-optimized-loss true)
+    :dispatch [:optimize-params b0 b1]}))
+
 
 (rf/reg-event-db
  :optimize-params
