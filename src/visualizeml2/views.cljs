@@ -10,6 +10,7 @@
    [visualizeml2.components.buttons :as buttons]
    [visualizeml2.components.inputs :as inputs]
    [visualizeml2.components.linear-reg :as linear-reg]
+   [visualizeml2.components.katex :as katex]
    ))
 
 
@@ -47,6 +48,7 @@
        [buttons/calculate-loss-button]
        ]
       [equations/loss-equation]
+      
       ;;  [:p (:fn-text @(rf/subscribe [::subs/linear-deps]))]
       [:div.column.is-one-third.debug
        [buttons/optimize-loss-button]
