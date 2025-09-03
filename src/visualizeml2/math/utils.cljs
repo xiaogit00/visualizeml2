@@ -51,8 +51,3 @@
              style (assoc :style style)
              class (assoc :class class)
              id    (assoc :id id))]))
-
-(def b1 2.33)
-(def b0 3.1332)
-
-(fn->pretty-str '(fn [x] (+ (* b1 x) b0)) {'b1 b1 'b0 b0})
