@@ -56,7 +56,7 @@
            xs (map :x linear-data)
            y_pred (map #(+ (* % b1) b0) xs)
            loss (reduce + (map #(Math/pow (- %2 %1) 2) ys y_pred))
-           fn-text (utils/fn->pretty-str '(fn [x] (+ (* b1 x) b0)) {'b1 b1 'b0 (goog.string/format "%.4f" b0)})
+           fn-text (utils/fn->pretty-str '(fn [x] (+ (* b1 x) b0)) {'b1 (goog.string/format "%.2f" b1) 'b0 (goog.string/format "%.2f" b0)})
            y_bar (/ (reduce + ys) (count ys))
            x_bar (/ (reduce + xs) (count xs))
            optimal-b1 (calculate-optimal-b1 xs ys x_bar y_bar)

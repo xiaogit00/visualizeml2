@@ -10,9 +10,9 @@
     [:div
      [:h1.mt-4.is-size-4.has-text-white.is-family-monospace "\nCalculating b1 & b0...\n"]
      [:h1.mt-2.is-size-4.has-text-white.is-family-monospace "b1 = "
-      [:span (.toFixed @(rf/subscribe [::subs/linear-b1]) 2)]]
+      [:span (.toFixed (js/Number @(rf/subscribe [::subs/linear-b1])) 2)]]
      [:h1.is-size-4.has-text-white.is-family-monospace "b0 = "
-      [:span (.toFixed @(rf/subscribe [::subs/linear-b0]) 2)]]]))
+      [:span (.toFixed (js/Number @(rf/subscribe [::subs/linear-b0])) 2)]]]))
 
 (defn explanation-text []
   (when @(rf/subscribe [::subs/set-optimized-loss])

@@ -23,7 +23,8 @@
     [charts/scatter-plot
      @(rf/subscribe [::subs/linear-data])
      @(rf/subscribe [::subs/show-estimate-line])
-     @(rf/subscribe [::subs/show-linear-loss-eqn])]]
+     @(rf/subscribe [::subs/show-linear-loss-eqn])
+     (:fn-text @(rf/subscribe [::subs/linear-deps]))]]
    ;; RIGHT COLUMN
    [:div.column
     [buttons/generate-data-button]
@@ -49,7 +50,6 @@
        ]
       [equations/loss-equation]
       
-      ;;  [:p (:fn-text @(rf/subscribe [::subs/linear-deps]))]
       [:div.column.is-one-third.debug
        [buttons/optimize-loss-button]
        [linear-reg/b0b1-display]

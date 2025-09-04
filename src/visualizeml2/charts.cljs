@@ -10,12 +10,14 @@
                                  :dot false
                                  }])
 
-(defn scatter-plot [data show-estimate-line show-linear-loss-eqn]
+(defn scatter-plot [data show-estimate-line show-linear-loss-eqn fn-text]
   [:> ScatterChart
    {:width 720
     :height 480
     :data data
     :margin {:top 4 :right 4 :bottom 4 :left 0}}
+   [:text {:x 100 :y 50 :fill "#8884d8" :fontSize 24 :fontFamily "Menlo, monospace"}
+    fn-text]
    [:> CartesianGrid {:strokeDasharray "3 3"}]
    [:> XAxis {:type "number" :dataKey "x" :name "X Value" :stroke "#FFDE82" :axisLine true}]
    [:> YAxis {:type "number" :dataKey "y" :name "Y Value" :stroke "#FFDE82" :axisLine true}]
